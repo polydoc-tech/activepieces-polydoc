@@ -102,22 +102,28 @@ They are repo files imported via Flows -> Import Flow, not bundled in the npm pa
 - [x] Per-angle example flows in `examples/` (PDF / screenshot / e-invoice).
 - [x] `release.yml` (OIDC trusted-publishing scaffold), README, this roadmap.
 - [x] `npm run scrub:check` (em-dash sweep) clean.
-- [~] Live sandbox smoke (`test/integration.test.ts`, gated on `POLYDOC_API_KEY`,
-  forced `X-Sandbox: true`, spaced for the ~5/sec limit). Code is in place and the
-  unit suite proves the builder against the live contract shape, but the live run is
-  **blocked from this environment** (see known unknowns).
+- [x] Live sandbox smoke (`test/integration.test.ts`, gated on `POLYDOC_API_KEY`,
+  forced `X-Sandbox: true`, spaced for the ~5/sec limit). Passes from an allowlisted
+  network (the build environment is edge-blocked, see known unknowns).
 
-### Out of scope this pass (follow-ups, need account-level steps)
+### Pass 2 - Publish [~]
 
-- Run the live integration suite from an allowlisted network and confirm each action
-  end to end.
-- Provide a hosted square logo at the `logoUrl` (see known unknowns).
-- Create `polydoc-tech/activepieces-polydoc` on GitHub (gh CLI, personal mode) + push.
-- First `npm publish` under the `polydoc.tech` npm account, then configure the npm
-  Trusted Publisher (GitHub Actions -> repo -> `release.yml`) so tagged releases
-  publish with provenance (playbook section 5).
-- Optional path A: open an `activepieces/activepieces` monorepo PR for an official
-  verified listing.
+- [x] Hosted square logo at `https://polydoc.tech/logo.png` (200, image/png); `index.ts`
+  points there.
+- [x] Create `polydoc-tech/activepieces-polydoc` on GitHub (gh CLI, polydoc-tech) and
+  push `main`.
+- [ ] First `npm publish` under the `polydoc.tech` npm account. npm login is
+  interactive, so this is a manual step; the package must exist before trusted
+  publishing can be configured (playbook section 5).
+- [ ] Configure the npm Trusted Publisher on npmjs.com (GitHub Actions -> repo
+  `polydoc-tech/activepieces-polydoc` -> workflow `release.yml`, environment blank,
+  allow `npm publish`) so tagged releases publish with provenance and no stored token.
+- [ ] Cut releases with `npm version patch && git push --follow-tags`.
+
+### Out of scope (later)
+
+- Path A: open an `activepieces/activepieces` monorepo PR for an official verified
+  listing.
 - Add an Activepieces section to the integrations docs guide
   (`polydoc-web/documentation/.../integrations/`) and record Activepieces gotchas in
   `CONNECTOR-PLAYBOOK.md`.
@@ -126,20 +132,14 @@ They are repo files imported via Flows -> Import Flow, not bundled in the npm pa
 
 ## 3. Open questions / known unknowns
 
-- **Live API returns 403 from this environment.** Every request to
-  `api.polydoc.tech` (including an unauthenticated `GET /health`) returns a bare
-  `403` with `content-length: 0` and no `server`/`content-type` header, while
-  `polydoc.tech` returns `200`. The TLS cert is the real Let's Encrypt cert for
-  `api.polydoc.tech`, so the request reaches the origin and is denied at the
-  ingress/edge, not by the app (the Fastify app returns JSON errors) and not by auth
-  (no-auth requests 403 too). Almost certainly an ingress IP-allowlist that does not
-  include this dev session's egress. The token, headers, and code path are correct;
-  the live smoke just needs to run from an allowlisted network. Cross-check the
-  `polydoc enforces NetworkPolicy` memory.
-- **`logoUrl` must be a hosted URL** (Activepieces requirement, unlike n8n's bundled
-  SVG). No hosted square PNG exists yet (`landing-page` has only `favicon.ico` and a
-  `Logo.tsx` component). `index.ts` points at `https://polydoc.tech/logo.png` as the
-  intended path; export a square PNG from `Logo.tsx` and host it there before publish.
+- **Build-environment edge block (live tests pass elsewhere).** From the build
+  environment, every request to `api.polydoc.tech` (including an unauthenticated
+  `GET /health`) returns a bare `403` with `content-length: 0` and no
+  `server`/`content-type` header, while `polydoc.tech` returns `200`. The TLS cert is
+  the real Let's Encrypt cert for the host, so the request reaches the origin and is
+  denied at the ingress/edge, not by the app and not by auth. The live smoke passes
+  from an allowlisted network. Cross-check the `polydoc enforces NetworkPolicy` memory
+  if it recurs.
 - **`minimumSupportedRelease`** is the Activepieces *app* release. The framework floors
   it to its own minimum (0.82.0 for `@activepieces/pieces-framework@0.29.1`), so it is
   pinned to `0.82.0` to match what the metadata actually emits.
