@@ -1,0 +1,56 @@
+{
+  "name": "Scheduled URL screenshot",
+  "description": "Capture a full-page PNG screenshot of a URL on a schedule (visual monitoring, OG images, change tracking).",
+  "tags": ["screenshot", "polydoc", "schedule"],
+  "pieces": ["@activepieces/piece-schedule", "activepieces-polydoc"],
+  "blogUrl": "",
+  "template": {
+    "displayName": "Scheduled URL screenshot",
+    "valid": true,
+    "schemaVersion": "1",
+    "trigger": {
+      "name": "trigger",
+      "type": "PIECE_TRIGGER",
+      "valid": true,
+      "displayName": "Cron Expression",
+      "settings": {
+        "pieceName": "@activepieces/piece-schedule",
+        "pieceVersion": "~0.1.5",
+        "pieceType": "OFFICIAL",
+        "packageType": "REGISTRY",
+        "triggerName": "cron_expression",
+        "input": { "cronExpression": "0 6 * * *", "timezone": "UTC" },
+        "inputUiInfo": { "customizedInputs": {} }
+      },
+      "nextAction": {
+        "name": "step_1",
+        "type": "PIECE",
+        "valid": true,
+        "displayName": "Capture Screenshot",
+        "settings": {
+          "pieceName": "activepieces-polydoc",
+          "pieceVersion": "~0.1.0",
+          "pieceType": "CUSTOM",
+          "packageType": "REGISTRY",
+          "actionName": "capture_screenshot",
+          "input": {
+            "sourceType": "url",
+            "source": "https://example.com",
+            "imageType": "png",
+            "fullPage": true,
+            "viewportWidth": 1280,
+            "viewportHeight": 800,
+            "outputEncoding": "binaryFile",
+            "deliveryMode": "download",
+            "filename": "snapshot.png"
+          },
+          "inputUiInfo": { "customizedInputs": {} },
+          "errorHandlingOptions": {
+            "continueOnFailure": { "value": false },
+            "retryOnFailure": { "value": false }
+          }
+        }
+      }
+    }
+  }
+}
