@@ -1,0 +1,54 @@
+{
+  "name": "Invoice PDF from a saved template (webhook)",
+  "description": "Receive invoice data on a webhook and render a branded PDF from a saved PolyDoc template.",
+  "tags": ["pdf", "polydoc", "template"],
+  "pieces": ["@activepieces/piece-webhook", "activepieces-polydoc"],
+  "blogUrl": "",
+  "template": {
+    "displayName": "Invoice PDF from a saved template (webhook)",
+    "valid": true,
+    "schemaVersion": "1",
+    "trigger": {
+      "name": "trigger",
+      "type": "PIECE_TRIGGER",
+      "valid": true,
+      "displayName": "Catch Webhook",
+      "settings": {
+        "pieceName": "@activepieces/piece-webhook",
+        "pieceVersion": "~0.1.5",
+        "pieceType": "OFFICIAL",
+        "packageType": "REGISTRY",
+        "triggerName": "catch_webhook",
+        "input": { "authType": "none", "authFields": {} },
+        "inputUiInfo": { "customizedInputs": {} }
+      },
+      "nextAction": {
+        "name": "step_1",
+        "type": "PIECE",
+        "valid": true,
+        "displayName": "Convert to PDF",
+        "settings": {
+          "pieceName": "activepieces-polydoc",
+          "pieceVersion": "~0.1.0",
+          "pieceType": "CUSTOM",
+          "packageType": "REGISTRY",
+          "actionName": "convert_to_pdf",
+          "input": {
+            "sourceType": "template",
+            "source": "YOUR_TEMPLATE_ID",
+            "templateData": "{{trigger.body}}",
+            "format": "A4",
+            "printBackground": true,
+            "deliveryMode": "download",
+            "filename": "invoice.pdf"
+          },
+          "inputUiInfo": { "customizedInputs": {} },
+          "errorHandlingOptions": {
+            "continueOnFailure": { "value": false },
+            "retryOnFailure": { "value": false }
+          }
+        }
+      }
+    }
+  }
+}
