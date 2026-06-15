@@ -5,7 +5,6 @@ import type { JsonObject, PolyDocRequest } from './types';
 export interface PolyDocAuthValue {
   apiKey: string;
   sandbox: boolean;
-  baseUrl: string;
 }
 
 export interface PolyDocResponse {
@@ -25,14 +24,9 @@ export function resolveAuth(auth: unknown): PolyDocAuthValue {
     raw['props'] && typeof raw['props'] === 'object'
       ? (raw['props'] as Record<string, unknown>)
       : raw;
-  const baseUrl =
-    typeof props['baseUrl'] === 'string' && props['baseUrl'] !== ''
-      ? (props['baseUrl'] as string)
-      : DEFAULT_BASE_URL;
   return {
     apiKey: String(props['apiKey'] ?? ''),
     sandbox: props['sandbox'] === true,
-    baseUrl,
   };
 }
 
@@ -46,7 +40,7 @@ export async function polyDocRequest(
   auth: PolyDocAuthValue,
   request: PolyDocRequest,
 ): Promise<PolyDocResponse> {
-  const baseUrl = auth.baseUrl.replace(/\/+$/, '');
+  const baseUrl = DEFAULT_BASE_URL.replace(/\/+$/, '');
   const res = await httpClient.sendRequest({
     method: HttpMethod.POST,
     url: `${baseUrl}${request.endpoint}`,

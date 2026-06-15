@@ -22,15 +22,9 @@ export const polydocAuth = PieceAuth.CustomAuth({
       required: false,
       defaultValue: false,
     }),
-    baseUrl: Property.ShortText({
-      displayName: 'Base URL',
-      description: 'PolyDoc API base URL. Change only for self-hosted or staging.',
-      required: false,
-      defaultValue: DEFAULT_BASE_URL,
-    }),
   },
   validate: async ({ auth }) => {
-    const { apiKey, baseUrl } = resolveAuth(auth);
+    const { apiKey } = resolveAuth(auth);
     if (!apiKey) {
       return { valid: false, error: 'API key is required.' };
     }
@@ -39,7 +33,7 @@ export const polydocAuth = PieceAuth.CustomAuth({
       // touching production quota. 200 means valid, 401 means a bad key.
       await httpClient.sendRequest({
         method: HttpMethod.POST,
-        url: `${baseUrl.replace(/\/+$/, '')}${SCREENSHOT_CONVERT_PATH}`,
+        url: `${DEFAULT_BASE_URL.replace(/\/+$/, '')}${SCREENSHOT_CONVERT_PATH}`,
         headers: {
           Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
@@ -56,7 +50,7 @@ export const polydocAuth = PieceAuth.CustomAuth({
       }
       return {
         valid: false,
-        error: 'Could not reach the PolyDoc API. Check the base URL and API key.',
+        error: 'Could not reach the PolyDoc API. Check your API key and try again.',
       };
     }
   },

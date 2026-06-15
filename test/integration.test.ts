@@ -113,7 +113,7 @@ describe.skipIf(!API_KEY)('PolyDoc live API (sandbox)', () => {
   });
 
   it('polyDocRequest (the action HTTP path) returns PDF bytes', async () => {
-    const auth = resolveAuth({ apiKey: API_KEY, sandbox: true, baseUrl: BASE });
+    const auth = resolveAuth({ apiKey: API_KEY, sandbox: true });
     const request = buildRequestBody({
       operation: 'pdf',
       sourceType: 'html',
