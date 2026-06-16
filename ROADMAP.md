@@ -106,19 +106,22 @@ They are repo files imported via Flows -> Import Flow, not bundled in the npm pa
   forced `X-Sandbox: true`, spaced for the ~5/sec limit). Passes from an allowlisted
   network (the build environment is edge-blocked, see known unknowns).
 
-### Pass 2 - Publish [~]
+### Pass 2 - Publish [x]
 
 - [x] Hosted square logo at `https://polydoc.tech/logo.png` (200, image/png); `index.ts`
   points there.
 - [x] Create `polydoc-tech/activepieces-polydoc` on GitHub (gh CLI, polydoc-tech) and
   push `main`.
-- [ ] First `npm publish` under the `polydoc.tech` npm account. npm login is
-  interactive, so this is a manual step; the package must exist before trusted
-  publishing can be configured (playbook section 5).
-- [ ] Configure the npm Trusted Publisher on npmjs.com (GitHub Actions -> repo
-  `polydoc-tech/activepieces-polydoc` -> workflow `release.yml`, environment blank,
-  allow `npm publish`) so tagged releases publish with provenance and no stored token.
-- [ ] Cut releases with `npm version patch && git push --follow-tags`.
+- [x] First `npm publish` (`0.1.0`) under the `polydoc.tech` npm account (manual, since
+  npm login is interactive). Verified by installing the published tarball fresh from the
+  registry and loading it: `piece.metadata()` exposes `displayName: PolyDoc`,
+  `CUSTOM_AUTH` (apiKey + sandbox + validate), and the three actions.
+- [x] Configure the npm Trusted Publisher on npmjs.com (GitHub Actions -> repo
+  `polydoc-tech/activepieces-polydoc` -> workflow `release.yml`, environment blank).
+- [x] OIDC release pipeline proven end to end: tag `v0.1.1` triggered `release.yml`,
+  which published `0.1.1` (now `latest`) with no stored token. SLSA provenance v1
+  attestation is attached (`dist.attestations`).
+- [x] Cut releases with `npm version patch && git push --follow-tags`.
 
 ### Out of scope (later)
 
