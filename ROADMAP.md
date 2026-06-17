@@ -51,6 +51,14 @@ the n8n template trio.
    return the API JSON. (Screenshot base64 forces a JSON response even under Download
    delivery, so the action flips `isBinary` off in that case.)
 
+5. **Published entry is `src/index.js`, not `dist/`.** The Activepieces engine loads a
+   community piece from `<package>/src/index.js` and ignores package.json `main`. So
+   `tsc` compiles to `dist/src/` (`rootDir "."`), `scripts/prepare-dist.mjs` assembles a
+   publishable `dist/` (entry `./src/index.js`, `files: ["src"]`, README, LICENSE), and
+   the release workflow runs `npm publish ./dist`. This mirrors the official
+   `@activepieces/piece-*` layout. AP dependency versions track the cloud engine
+   (framework 0.31.0 / common 0.12.4 / shared 0.94.0).
+
 ---
 
 ## 1. Product model (mirror the n8n node)
@@ -122,6 +130,13 @@ They are repo files imported via Flows -> Import Flow, not bundled in the npm pa
   which published `0.1.1` (now `latest`) with no stored token. SLSA provenance v1
   attestation is attached (`dist.attestations`).
 - [x] Cut releases with `npm version patch && git push --follow-tags`.
+- [x] `0.1.2`: fixed the cloud install. `0.1.1` shipped only `dist/index.js`, so the
+  engine's metadata extraction threw `ERR_MODULE_NOT_FOUND` on `<pkg>/src/index.js`
+  (surfaced on cloud as a generic `ENGINE_OPERATION_FAILURE`, the real stack swallowed
+  per activepieces#7229). `0.1.2` publishes the `dist/` folder with a `src/index.js`
+  entry and AP deps aligned to the cloud engine. Verified by installing into a local
+  AP engine (`activepieces/activepieces:latest`, docker) via both the REGISTRY and
+  ARCHIVE paths: both return HTTP 201 and extract the full metadata.
 
 ### Out of scope (later)
 
@@ -143,8 +158,9 @@ They are repo files imported via Flows -> Import Flow, not bundled in the npm pa
   denied at the ingress/edge, not by the app and not by auth. The live smoke passes
   from an allowlisted network. Cross-check the `polydoc enforces NetworkPolicy` memory
   if it recurs.
-- **`minimumSupportedRelease`** is the Activepieces *app* release. The framework floors
-  it to its own minimum (0.82.0 for `@activepieces/pieces-framework@0.29.1`), so it is
-  pinned to `0.82.0` to match what the metadata actually emits.
+- **`minimumSupportedRelease`** is the Activepieces *app* release (currently `0.82.0`,
+  which is also the version of the `latest` self-hosted image used to verify the
+  install). It is distinct from the `@activepieces/pieces-framework` package version
+  (`0.31.0`), which is what the cloud *engine* loads pieces with.
 - **Flow-template schema generations** (legacy `template:` vs HEAD `flows:[]`): the
   examples use the legacy wrapper, which the import parser normalizes on both.
