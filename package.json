@@ -42,9 +42,9 @@
     "scrub:check": "grep -rn $'\\u2014' src README.md examples && echo 'em-dash found' && exit 1 || echo 'no em-dash'"
   },
   "dependencies": {
-    "@activepieces/pieces-common": "^0.12.3",
-    "@activepieces/pieces-framework": "^0.29.1",
-    "@activepieces/shared": "^0.85.0",
+    "@activepieces/pieces-common": "0.12.4",
+    "@activepieces/pieces-framework": "0.31.0",
+    "@activepieces/shared": "0.94.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
