@@ -138,13 +138,24 @@ They are repo files imported via Flows -> Import Flow, not bundled in the npm pa
   AP engine (`activepieces/activepieces:latest`, docker) via both the REGISTRY and
   ARCHIVE paths: both return HTTP 201 and extract the full metadata.
 
-### Out of scope (later)
+### Pass 3 - Official listing, docs, playbook [~]
 
-- Path A: open an `activepieces/activepieces` monorepo PR for an official verified
-  listing.
-- Add an Activepieces section to the integrations docs guide
-  (`polydoc-web/documentation/.../integrations/`) and record Activepieces gotchas in
-  `CONNECTOR-PLAYBOOK.md`.
+- [x] **Path A**: opened the `activepieces/activepieces` monorepo PR for an official
+  verified listing (PR activepieces#13766, 2026-06-17). Ported the source into
+  `packages/pieces/community/polydoc` (`@activepieces/piece-polydoc`), `workspace:*`
+  framework deps, `tsconfig.base.json` alias, `aiMetadata` on the three actions; the
+  one porting change was bracket-notation in `build-request-body.ts` for the monorepo's
+  `noPropertyAccessFromIndexSignature`. `turbo run build|lint --filter=@activepieces/piece-polydoc`
+  clean. Fork `polydoc-tech/activepieces`, branch `feat/piece-polydoc`. Awaiting review.
+- [x] Recorded Activepieces gotchas in `CONNECTOR-PLAYBOOK.md` (new section 9: path A vs
+  path B, the `src/index.js` engine-load fix, no-`displayOptions`/`DynamicProperties`,
+  the `validate` credential test, and the bun+turbo monorepo conventions).
+- [~] Rewrite the Activepieces integration docs guide to lead with the native piece
+  (`polydoc-web/documentation/.../integrations/activepieces.md` + `Activepieces.tsx`),
+  covering the three canonical use cases (PDF invoice / screenshot / e-invoice). The
+  existing guide is HTTP-piece-based; its 8 screenshots are stale. Targets the
+  community package `activepieces-polydoc` (installable today), decoupled from the PR
+  review timeline. Needs new screenshots from a real AP instance.
 
 ---
 
