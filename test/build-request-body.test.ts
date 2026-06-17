@@ -80,6 +80,14 @@ describe('buildRequestBody', () => {
     });
   });
 
+  it('Screenshot throws when only one viewport dimension is given', () => {
+    expect(() =>
+      buildRequestBody(
+        base({ operation: 'screenshot', screenshotOptions: { imageType: 'png', viewportWidth: 1024 } }),
+      ),
+    ).toThrow(/viewport width and height/i);
+  });
+
   it('Screenshot base64 encoding sets screenshot.encoding and is non-binary', () => {
     const r = buildRequestBody(
       base({ operation: 'screenshot', screenshotOptions: { imageType: 'png', encoding: 'base64' } }),
