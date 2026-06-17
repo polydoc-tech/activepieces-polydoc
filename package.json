@@ -20,19 +20,15 @@
     "type": "git",
     "url": "git+https://github.com/polydoc-tech/activepieces-polydoc.git"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
   "engines": {
     "node": ">=18.20"
   },
-  "files": [
-    "dist"
-  ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.lib.json",
+    "build": "tsc -p tsconfig.lib.json && node scripts/prepare-dist.mjs",
     "prepublishOnly": "npm run build",
     "dev": "tsc -p tsconfig.lib.json --watch",
     "lint": "eslint src",
