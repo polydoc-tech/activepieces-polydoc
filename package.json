@@ -1,6 +1,6 @@
 {
   "name": "activepieces-polydoc",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "PolyDoc connector for Activepieces: convert HTML or a URL to PDF, capture screenshots, and generate EU e-invoices (Factur-X / ZUGFeRD).",
   "keywords": [
     "activepieces",
