@@ -89,7 +89,7 @@ export const timeoutProp = Property.Number({
 export const advancedProp = Property.Json({
   displayName: 'Advanced (JSON)',
   description:
-    'Raw fields deep-merged into the request body for any API option not exposed above (e.g. pdf.watermark, pdf.pdfa, render, request).',
+    'Raw fields deep-merged into the request body for any API option not exposed above (e.g. pdf.watermark, pdf.pdfa, pdf.ua, render, request).',
   required: false,
   defaultValue: {},
 });
