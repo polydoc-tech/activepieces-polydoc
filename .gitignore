@@ -5,3 +5,6 @@ dist/
 *.tgz
 coverage/
 .DS_Store
+
+# Internal dev roadmap - kept local, not published
+ROADMAP.md
