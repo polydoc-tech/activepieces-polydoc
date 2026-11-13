@@ -39,7 +39,6 @@ npm install
 npm run build       # tsc -> dist/
 npm run lint        # eslint
 npm test            # unit tests (request body builder)
-npm run scrub:check # fail on em-dashes in UI/customer text
 ```
 
 Live smoke test against the real API (uses sandbox quota, needs network access to api.polydoc.tech):
