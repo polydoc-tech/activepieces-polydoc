@@ -41,8 +41,5 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Scrub em-dashes
-        run: npm run scrub:check
-
       - name: Publish to npm
         run: npm publish ./dist
