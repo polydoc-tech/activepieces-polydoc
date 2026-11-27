@@ -38,6 +38,7 @@ Importable flow templates live in [`examples/`](./examples), one per use case. I
 npm install
 npm run build       # tsc -> dist/
 npm run lint        # eslint
+npm run typecheck   # tsc over src/ and test/
 npm test            # unit tests (request body builder)
 ```
 
