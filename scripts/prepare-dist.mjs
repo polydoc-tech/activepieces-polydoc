@@ -20,6 +20,7 @@ const published = {
   homepage: pkg.homepage,
   author: pkg.author,
   repository: pkg.repository,
+  bugs: pkg.bugs,
   main: './src/index.js',
   engines: pkg.engines,
   files: ['src'],

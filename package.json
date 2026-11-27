@@ -15,17 +15,24 @@
   ],
   "license": "MIT",
   "homepage": "https://polydoc.tech",
-  "author": "PolyDoc <hello@polydoc.tech>",
+  "author": {
+    "name": "PolyDoc",
+    "email": "hello@polydoc.tech"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/polydoc-tech/activepieces-polydoc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/polydoc-tech/activepieces-polydoc/issues"
   },
   "main": "./dist/src/index.js",
   "engines": {
     "node": ">=18.20"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "scripts": {
     "build": "tsc -p tsconfig.lib.json && node scripts/prepare-dist.mjs",
@@ -33,6 +40,7 @@
     "dev": "tsc -p tsconfig.lib.json --watch",
     "lint": "eslint src",
     "lintfix": "eslint src --fix",
+    "typecheck": "tsc -p tsconfig.test.json",
     "test": "vitest run test/build-request-body.test.ts",
     "test:integration": "vitest run test/integration.test.ts"
   },
